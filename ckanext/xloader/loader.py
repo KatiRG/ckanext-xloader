@@ -24,6 +24,9 @@ from ckan.plugins.toolkit import config
 
 import ckanext.datastore.backend.postgres as datastore_db
 
+from ckan.plugins.toolkit import asbool
+unidecode_option = asbool(config.get('ckanext.xloader.unidecode_option', True))
+
 get_write_engine = datastore_db.get_write_engine
 create_indexes = datastore_db.create_indexes
 _drop_indexes = datastore_db._drop_indexes
@@ -50,7 +53,8 @@ def load_csv(csv_filepath, resource_id, mimetype='text/csv', logger=None):
         raise FileCouldNotBeLoadedError(e)
 
     # Some headers might have been converted from strings to floats and such.
-    headers = encode_headers(headers)
+    if unidecode_option:
+        headers = encode_headers(headers)
 
     # Get the list of rows to skip. The rows in the tabulator stream are
     # numbered starting with 1.
@@ -259,7 +263,8 @@ def load_table(table_filepath, resource_id, mimetype='text/csv', logger=None):
             for f in existing.get('fields', []) if 'info' in f)
 
     # Some headers might have been converted from strings to floats and such.
-    headers = encode_headers(headers)
+    if unidecode_option:
+        headers = encode_headers(headers)
 
     # Get the list of rows to skip. The rows in the tabulator stream are
     # numbered starting with 1. We also want to skip the header row.
