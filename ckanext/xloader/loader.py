@@ -25,7 +25,7 @@ from ckan.plugins.toolkit import config
 import ckanext.datastore.backend.postgres as datastore_db
 
 from ckan.plugins.toolkit import asbool
-unidecode_option = asbool(config.get('ckanext.xloader.unidecode_option', True))
+unidecode_option = asbool(config.get('ckanext.xloader.unidecode_option', False))
 
 get_write_engine = datastore_db.get_write_engine
 create_indexes = datastore_db.create_indexes
